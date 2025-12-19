@@ -13,7 +13,7 @@
 // limitations under the License.
 
 mod empty_table;
-mod memtable;
+pub mod memtable;
 pub mod table_info;
 
 pub use empty_table::EmptyTable;
