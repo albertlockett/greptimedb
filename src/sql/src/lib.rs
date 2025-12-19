@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#![feature(box_patterns)]
-#![feature(assert_matches)]
-#![feature(if_let_guard)]
+// #![feature(box_patterns)]
+// #![feature(assert_matches)]
+// #![feature(if_let_guard)]
 
 pub mod ast;
 pub mod dialect;

@@ -341,7 +341,9 @@ impl AggregateUDFImpl for StateWrapper {
                 name: acc_args.name,
                 is_distinct: acc_args.is_distinct,
                 exprs: acc_args.exprs,
+                expr_fields: &[],
             };
+            println!("TODO no expr fields");
             self.inner.accumulator(acc_args)?
         };
 

@@ -120,10 +120,22 @@ pub(crate) fn sql_number_to_value(data_type: &ConcreteDataType, n: &str) -> Resu
     // TODO(hl): also Date/DateTime
 }
 
+pub fn sql_value_to_value(
+    column_name: &str,
+    data_type: &ConcreteDataType,
+    sql_val: &SqlValue,
+    timezone: Option<&Timezone>,
+    unary_op: Option<UnaryOperator>,
+    auto_string_to_numeric: bool,
+) -> Result<Value> {
+    todo!()
+}
+
+/*
 /// Converts SQL value to value according to the data type.
 /// If `auto_string_to_numeric` is true, tries to cast the string value to numeric values,
 /// and returns error if the cast fails.
-pub fn sql_value_to_value(
+pub fn sql_value_to_value2(
     column_name: &str,
     data_type: &ConcreteDataType,
     sql_val: &SqlValue,
@@ -242,6 +254,7 @@ pub fn sql_value_to_value(
         })
     }
 }
+*/
 
 pub(crate) fn parse_string_to_value(
     column_name: &str,

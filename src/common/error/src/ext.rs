@@ -40,8 +40,9 @@ pub trait ErrorExt: StackError {
             _ => {
                 let error = self.last();
                 if let Some(external_error) = error.source() {
-                    let external_root = external_error.sources().last().unwrap();
-
+                    println!("ALBERT external root happen {:?}", external_error);
+                    // let external_root = external_error.sources().last().unwrap();
+                    let external_root = external_error;
                     if error.transparent() {
                         format!("{external_root}")
                     } else {
@@ -61,8 +62,11 @@ pub trait ErrorExt: StackError {
     {
         let error = self.last();
         if let Some(external_error) = error.source() {
-            let external_root = external_error.sources().last().unwrap();
-            Some(external_root)
+            println!("ALBERT external error happen = {:?}", external_error);
+            // todo!("return error iter")
+            Some(external_error)
+            // let external_root = external_error.sources().last().unwrap();
+            // Some(external_root)
         } else {
             None
         }

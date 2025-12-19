@@ -47,14 +47,15 @@ impl SubstraitPlan for DFLogicalSubstraitConvertor {
         message: B,
         state: SessionState,
     ) -> Result<Self::Plan, Self::Error> {
-        let plan = Plan::decode(message).context(DecodeRelSnafu)?;
-        let df_plan = from_substrait_plan(&state, &plan)
-            .await
-            .context(DecodeDfPlanSnafu)?;
-        let df_plan = FixStateUdafOrderingAnalyzer {}
-            .analyze(df_plan, state.config_options())
-            .context(DecodeDfPlanSnafu)?;
-        Ok(df_plan)
+        todo!("oops no substraint");
+        // let plan = Plan::decode(message).context(DecodeRelSnafu)?;
+        // let df_plan = from_substrait_plan(&state, &plan)
+        //     .await
+        //     .context(DecodeDfPlanSnafu)?;
+        // let df_plan = FixStateUdafOrderingAnalyzer {}
+        //     .analyze(df_plan, state.config_options())
+        //     .context(DecodeDfPlanSnafu)?;
+        // Ok(df_plan)
     }
 
     fn encode(
@@ -62,14 +63,15 @@ impl SubstraitPlan for DFLogicalSubstraitConvertor {
         plan: &Self::Plan,
         serializer: impl SerializerRegistry + 'static,
     ) -> Result<Bytes, Self::Error> {
-        let plan = UnFixStateUdafOrderingAnalyzer {}
-            .analyze(plan.clone(), &Default::default())
-            .context(EncodeDfPlanSnafu)?;
-        let mut buf = BytesMut::new();
-        let substrait_plan = self.to_sub_plan(&plan, serializer)?;
-        substrait_plan.encode(&mut buf).context(EncodeRelSnafu)?;
+        todo!("oops no substrait")
+        // let plan = UnFixStateUdafOrderingAnalyzer {}
+        //     .analyze(plan.clone(), &Default::default())
+        //     .context(EncodeDfPlanSnafu)?;
+        // let mut buf = BytesMut::new();
+        // let substrait_plan = self.to_sub_plan(&plan, serializer)?;
+        // substrait_plan.encode(&mut buf).context(EncodeRelSnafu)?;
 
-        Ok(buf.freeze())
+        // Ok(buf.freeze())
     }
 }
 

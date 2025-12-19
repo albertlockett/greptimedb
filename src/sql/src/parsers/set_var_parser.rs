@@ -24,35 +24,36 @@ use crate::statements::statement::Statement;
 /// SET variables statement parser implementation
 impl ParserContext<'_> {
     pub(crate) fn parse_set_variables(&mut self) -> Result<Statement> {
-        let _ = self.parser.next_token();
-        let spstatement = self.parser.parse_set().context(error::SyntaxSnafu)?;
-        match spstatement {
-            SpStatement::Set(set) => match set {
-                Set::SingleAssignment {
-                    scope: _,
-                    hivevar,
-                    variable,
-                    values,
-                } if !hivevar => Ok(Statement::SetVariables(SetVariables {
-                    variable,
-                    value: values,
-                })),
+        todo!()
+        // let _ = self.parser.next_token();
+        // let spstatement = self.parser.parse_set().context(error::SyntaxSnafu)?;
+        // match spstatement {
+        //     SpStatement::Set(set) => match set {
+        //         Set::SingleAssignment {
+        //             scope: _,
+        //             hivevar,
+        //             variable,
+        //             values,
+        //         } if !hivevar => Ok(Statement::SetVariables(SetVariables {
+        //             variable,
+        //             value: values,
+        //         })),
 
-                Set::SetTimeZone { local: _, value } => Ok(Statement::SetVariables(SetVariables {
-                    variable: ObjectName::from(vec![Ident::new("TIMEZONE")]),
-                    value: vec![value],
-                })),
+        //         Set::SetTimeZone { local: _, value } => Ok(Statement::SetVariables(SetVariables {
+        //             variable: ObjectName::from(vec![Ident::new("TIMEZONE")]),
+        //             value: vec![value],
+        //         })),
 
-                set => error::UnsupportedSnafu {
-                    keyword: set.to_string(),
-                }
-                .fail(),
-            },
-            unexp => error::UnsupportedSnafu {
-                keyword: unexp.to_string(),
-            }
-            .fail(),
-        }
+        //         set => error::UnsupportedSnafu {
+        //             keyword: set.to_string(),
+        //         }
+        //         .fail(),
+        //     },
+        //     unexp => error::UnsupportedSnafu {
+        //         keyword: unexp.to_string(),
+        //     }
+        //     .fail(),
+        // }
     }
 }
 

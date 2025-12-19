@@ -100,12 +100,12 @@ rust.unexpected_cfgs = { level = "warn", check-cfg = ['cfg(tokio_unstable)'] }
 # See for more detaiils: https://github.com/rust-lang/cargo/issues/11329
 ahash = { version = "0.8", features = ["compile-time-rng"] }
 aquamarine = "0.6"
-arrow = { version = "56.2", features = ["prettyprint"] }
-arrow-array = { version = "56.2", default-features = false, features = ["chrono-tz"] }
-arrow-buffer = "56.2"
-arrow-flight = "56.2"
-arrow-ipc = { version = "56.2", default-features = false, features = ["lz4", "zstd"] }
-arrow-schema = { version = "56.2", features = ["serde"] }
+arrow = { version = "57.0", features = ["prettyprint"] }
+arrow-array = { version = "57.0", default-features = false, features = ["chrono-tz"] }
+arrow-buffer = "57.0"
+arrow-flight = "57.0"
+arrow-ipc = { version = "57.0", default-features = false, features = ["lz4", "zstd"] }
+arrow-schema = { version = "57.0", features = ["serde"] }
 async-stream = "0.3"
 async-trait = "0.1"
 # Remember to update axum-extra, axum-macros when updating axum
@@ -125,18 +125,18 @@ config = "0.13.0"
 const_format = "0.2"
 crossbeam-utils = "0.8"
 dashmap = "6.1"
-datafusion = "50"
-datafusion-common = "50"
-datafusion-expr = "50"
-datafusion-functions = "50"
-datafusion-functions-aggregate-common = "50"
-datafusion-optimizer = "50"
-datafusion-orc = "0.5"
-datafusion-pg-catalog = "0.12.3"
-datafusion-physical-expr = "50"
-datafusion-physical-plan = "50"
-datafusion-sql = "50"
-datafusion-substrait = "50"
+datafusion = { version = "51", default-features = false }
+datafusion-common = "51"
+datafusion-expr = "51"
+datafusion-functions = "51"
+datafusion-functions-aggregate-common = "51"
+datafusion-optimizer = "51"
+datafusion-orc = "0.6"
+datafusion-pg-catalog = "0.13.1"
+datafusion-physical-expr = "51"
+datafusion-physical-plan = "51"
+datafusion-sql = "51"
+datafusion-substrait = "51"
 deadpool = "0.12"
 deadpool-postgres = "0.14"
 derive_builder = "0.20"
@@ -183,7 +183,7 @@ otel-arrow-rust = { git = "https://github.com/GreptimeTeam/otel-arrow", rev = "2
     "server",
 ] }
 parking_lot = "0.12"
-parquet = { version = "56.2", default-features = false, features = ["arrow", "async", "object_store"] }
+parquet = { version = "57.0", default-features = false, features = ["arrow", "async", "object_store"] }
 paste = "1.0"
 pin-project = "1.0"
 pretty_assertions = "1.4.0"
@@ -320,7 +320,7 @@ git = "https://github.com/GreptimeTeam/greptime-meter.git"
 rev = "5618e779cf2bb4755b499c630fba4c35e91898cb"
 
 [patch.crates-io]
-datafusion = { git = "https://github.com/GreptimeTeam/datafusion.git", rev = "fd4b2abcf3c3e43e94951bda452c9fd35243aab0" }
+datafusion = { git = "https://github.com/GreptimeTeam/datafusion.git", rev = "fd4b2abcf3c3e43e94951bda452c9fd35243aab0", default-features = false}
 datafusion-common = { git = "https://github.com/GreptimeTeam/datafusion.git", rev = "fd4b2abcf3c3e43e94951bda452c9fd35243aab0" }
 datafusion-expr = { git = "https://github.com/GreptimeTeam/datafusion.git", rev = "fd4b2abcf3c3e43e94951bda452c9fd35243aab0" }
 datafusion-functions = { git = "https://github.com/GreptimeTeam/datafusion.git", rev = "fd4b2abcf3c3e43e94951bda452c9fd35243aab0" }

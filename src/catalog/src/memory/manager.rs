@@ -132,16 +132,24 @@ impl CatalogManager for MemoryCatalogManager {
         table_name: &str,
         _query_ctx: Option<&QueryContext>,
     ) -> Result<Option<TableRef>> {
-        let result = try {
+        // let result = try {
+        //     self.catalogs
+        //         .read()
+        //         .unwrap()
+        //         .get(catalog)?
+        //         .get(schema)?
+        //         .get(table_name)
+        //         .cloned()?
+        // };
+        let result = 
             self.catalogs
                 .read()
                 .unwrap()
-                .get(catalog)?
-                .get(schema)?
+                .get(catalog).unwrap() // TODO no unwrap
+                .get(schema).unwrap() // TODO no unwrap
                 .get(table_name)
-                .cloned()?
-        };
-        Ok(result)
+                .cloned().unwrap(); // TODO no unwrap
+        Ok(Some(result))
     }
 
     async fn table_info_by_id(&self, table_id: TableId) -> Result<Option<TableInfoRef>> {

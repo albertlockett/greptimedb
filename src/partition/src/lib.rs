@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#![feature(assert_matches)]
+// #![feature(assert_matches)]
 //! Structs and traits for partitioning rule.
 
 pub mod checker;

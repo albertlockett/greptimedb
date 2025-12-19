@@ -315,7 +315,8 @@ impl Default for SlowQueryOptions {
             record_type: SlowQueriesRecordType::SystemTable,
             threshold: Duration::from_secs(30),
             sample_ratio: 1.0,
-            ttl: Duration::from_days(90),
+            // TODO albert you fool
+            ttl: Duration::from_secs(90 * 24 * 60 * 60),
         }
     }
 }

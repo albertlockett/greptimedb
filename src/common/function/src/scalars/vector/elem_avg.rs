@@ -17,7 +17,7 @@ use std::fmt::Display;
 use datafusion::arrow::datatypes::DataType;
 use datafusion::logical_expr::ColumnarValue;
 use datafusion_common::ScalarValue;
-use datafusion_expr::type_coercion::aggregates::{BINARYS, STRINGS};
+// use datafusion_expr::type_coercion::aggregates::{BINARYS, STRINGS};
 use datafusion_expr::{ScalarFunctionArgs, Signature, TypeSignature, Volatility};
 use nalgebra::DVectorView;
 
@@ -33,16 +33,17 @@ pub(crate) struct ElemAvgFunction {
 
 impl Default for ElemAvgFunction {
     fn default() -> Self {
-        Self {
-            signature: Signature::one_of(
-                vec![
-                    TypeSignature::Uniform(1, STRINGS.to_vec()),
-                    TypeSignature::Uniform(1, BINARYS.to_vec()),
-                    TypeSignature::Uniform(1, vec![DataType::BinaryView]),
-                ],
-                Volatility::Immutable,
-            ),
-        }
+        todo!("oops no strings binaries");
+        // Self {
+        //     signature: Signature::one_of(
+        //         vec![
+        //             TypeSignature::Uniform(1, STRINGS.to_vec()),
+        //             TypeSignature::Uniform(1, BINARYS.to_vec()),
+        //             TypeSignature::Uniform(1, vec![DataType::BinaryView]),
+        //         ],
+        //         Volatility::Immutable,
+        //     ),
+        // }
     }
 }
 

@@ -18,7 +18,11 @@ use std::sync::Arc;
 use arrow::record_batch::RecordBatch;
 use arrow_schema::Schema;
 use async_trait::async_trait;
-use datafusion::datasource::physical_plan::{FileMeta, ParquetFileReaderFactory};
+use datafusion::datasource::listing::PartitionedFile;
+use datafusion::datasource::physical_plan::{
+    // FileMeta, 
+    ParquetFileReaderFactory
+};
 use datafusion::error::Result as DatafusionResult;
 use datafusion::parquet::arrow::async_reader::AsyncFileReader;
 use datafusion::parquet::arrow::{ArrowWriter, parquet_to_arrow_schema};
@@ -97,18 +101,27 @@ impl ParquetFileReaderFactory for DefaultParquetFileReaderFactory {
     // TODO(weny): Supports [`metadata_size_hint`].
     // The upstream has a implementation supports [`metadata_size_hint`],
     // however it coupled with Box<dyn ObjectStore>.
-    fn create_reader(
+        fn create_reader(
         &self,
-        _partition_index: usize,
-        file_meta: FileMeta,
-        _metadata_size_hint: Option<usize>,
-        _metrics: &ExecutionPlanMetricsSet,
+        partition_index: usize,
+        partitioned_file: PartitionedFile,
+        metadata_size_hint: Option<usize>,
+        metrics: &ExecutionPlanMetricsSet,
     ) -> DatafusionResult<Box<dyn AsyncFileReader + Send>> {
-        let path = file_meta.location().to_string();
-        let object_store = self.object_store.clone();
-
-        Ok(Box::new(LazyParquetFileReader::new(object_store, path)))
+        todo!()
     }
+    // fn create_reader(
+    //     &self,
+    //     _partition_index: usize,
+    //     // file_meta: FileMe
+    //     _metadata_size_hint: Option<usize>,
+    //     _metrics: &ExecutionPlanMetricsSet,
+    // ) -> DatafusionResult<Box<dyn AsyncFileReader + Send>> {
+    //     let path = file_meta.location().to_string();
+    //     let object_store = self.object_store.clone();
+
+    //     Ok(Box::new(LazyParquetFileReader::new(object_store, path)))
+    // }
 }
 
 pub struct LazyParquetFileReader {
@@ -181,7 +194,8 @@ impl DfRecordBatchEncoder for ArrowWriter<SharedBuffer> {
 #[async_trait]
 impl ArrowWriterCloser for ArrowWriter<SharedBuffer> {
     async fn close(self) -> Result<FileMetaData> {
-        self.close().context(error::EncodeRecordBatchSnafu)
+        todo!()
+        // self.close().context(error::EncodeRecordBatchSnafu)
     }
 }
 

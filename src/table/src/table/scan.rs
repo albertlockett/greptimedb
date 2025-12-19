@@ -128,20 +128,24 @@ impl RegionScanExec {
                 ))
             })
             .collect::<Vec<_>>();
-        let ts_col: Option<PhysicalSortExpr> = try {
-            PhysicalSortExpr::new(
-                Arc::new(
-                    Column::new_with_schema(
-                        &metadata.time_index_column().column_schema.name,
-                        &arrow_schema,
-                    )
-                    .ok()?,
-                ) as _,
-                SortOptions {
-                    descending: false,
-                    nulls_first: true,
-                },
-            )
+        // let ts_col: Option<PhysicalSortExpr> = try {
+        //     PhysicalSortExpr::new(
+        //         Arc::new(
+        //             Column::new_with_schema(
+        //                 &metadata.time_index_column().column_schema.name,
+        //                 &arrow_schema,
+        //             )
+        //             .ok()?,
+        //         ) as _,
+        //         SortOptions {
+        //             descending: false,
+        //             nulls_first: true,
+        //         },
+        //     )
+        // };
+
+        let ts_col: Option<PhysicalSortExpr> = {
+            todo!()
         };
 
         let eq_props = match request.distribution {

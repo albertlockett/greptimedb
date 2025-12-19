@@ -144,15 +144,18 @@ impl OptionMap {
     }
 
     pub fn entries(&self) -> impl Iterator<Item = (&str, Either<&OptionValue, &str>)> {
-        let options = self
-            .options
-            .iter()
-            .map(|(k, v)| (k.as_str(), Either::Left(v)));
-        let secrets = self
-            .secrets
-            .keys()
-            .map(|k| (k.as_str(), Either::Right("******")));
-        std::iter::chain(options, secrets)
+        // let options = self
+        //     .options
+        //     .iter()
+        //     .map(|(k, v)| (k.as_str(), Either::Left(v)));
+        // let secrets = self
+        //     .secrets
+        //     .keys()
+        //     .map(|k| (k.as_str(), Either::Right("******")));
+        // std::iter::chain(options, secrets)
+        println!("TODO EMPTY VEC");
+        vec![].into_iter()
+        // todo!()
     }
 }
 

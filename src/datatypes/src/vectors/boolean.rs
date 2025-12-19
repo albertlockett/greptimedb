@@ -71,9 +71,10 @@ impl From<Vec<Option<bool>>> for BooleanVector {
 
 impl<Ptr: Borrow<Option<bool>>> FromIterator<Ptr> for BooleanVector {
     fn from_iter<I: IntoIterator<Item = Ptr>>(iter: I) -> Self {
-        BooleanVector {
-            array: BooleanArray::from_iter(iter),
-        }
+        todo!()
+        // BooleanVector {
+        //     array: BooleanArray::from_iter(iter),
+        // }
     }
 }
 

@@ -55,9 +55,9 @@ pub type EventRecorderRef = Arc<dyn EventRecorder>;
 /// The time interval for flushing batched events to the event handler.
 pub const DEFAULT_FLUSH_INTERVAL_SECONDS: Duration = Duration::from_secs(5);
 /// The default TTL(90 days) for the events table.
-const DEFAULT_EVENTS_TABLE_TTL: Duration = Duration::from_days(90);
+const DEFAULT_EVENTS_TABLE_TTL: Duration = Duration::from_secs(90 * 24 * 60 * 60);
 /// The default compaction time window for the events table.
-pub const DEFAULT_COMPACTION_TIME_WINDOW: Duration = Duration::from_days(1);
+pub const DEFAULT_COMPACTION_TIME_WINDOW: Duration = Duration::from_secs(24 * 60 * 60);
 // The capacity of the tokio channel for transmitting events to background processor.
 const DEFAULT_CHANNEL_SIZE: usize = 2048;
 // The size of the buffer for batching events before flushing to event handler.

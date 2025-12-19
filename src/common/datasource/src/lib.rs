@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#![feature(assert_matches)]
-#![feature(type_alias_impl_trait)]
+// #![feature(assert_matches)]
+// #![feature(type_alias_impl_trait)]
 
 pub mod buffered_writer;
 pub mod compressed_writer;

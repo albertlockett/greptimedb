@@ -356,7 +356,7 @@ impl MetricCollector {
 }
 
 impl ExecutionPlanVisitor for MetricCollector {
-    type Error = !;
+    type Error = std::io::Error;
 
     fn pre_visit(&mut self, plan: &dyn ExecutionPlan) -> std::result::Result<bool, Self::Error> {
         // skip if no metric available

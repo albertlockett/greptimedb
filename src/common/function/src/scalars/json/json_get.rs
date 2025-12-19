@@ -22,7 +22,7 @@ use datafusion_common::arrow::array::{
     StringViewBuilder,
 };
 use datafusion_common::arrow::datatypes::DataType;
-use datafusion_expr::type_coercion::aggregates::STRINGS;
+// use datafusion_expr::type_coercion::aggregates::STRINGS;
 use datafusion_expr::{ColumnarValue, ScalarFunctionArgs, Signature};
 
 use crate::function::{Function, extract_args};
@@ -226,16 +226,17 @@ impl JsonGetObject {
 
 impl Default for JsonGetObject {
     fn default() -> Self {
-        Self {
-            signature: helper::one_of_sigs2(
-                vec![
-                    DataType::Binary,
-                    DataType::LargeBinary,
-                    DataType::BinaryView,
-                ],
-                STRINGS.to_vec(),
-            ),
-        }
+        todo!("oops no strings")
+        // Self {
+        //     signature: helper::one_of_sigs2(
+        //         vec![
+        //             DataType::Binary,
+        //             DataType::LargeBinary,
+        //             DataType::BinaryView,
+        //         ],
+        //         STRINGS.to_vec(),
+        //     ),
+        // }
     }
 }
 

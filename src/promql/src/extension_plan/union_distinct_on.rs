@@ -426,12 +426,13 @@ impl HashedData {
                 hash_utils::create_hashes(&arrays, &random_state, &mut hashes_buffer)?;
             for (row_number, hash_value) in hash_values.iter().enumerate() {
                 // Only keeps the first observed row for each hash value
-                if hash_map
-                    .try_insert(*hash_value, interleave_indices.len())
-                    .is_ok()
-                {
-                    interleave_indices.push((batch_number, row_number));
-                }
+                todo!()
+                // if hash_map
+                //     .try_insert(*hash_value, interleave_indices.len())
+                //     .is_ok()
+                // {
+                //     interleave_indices.push((batch_number, row_number));
+                // }
             }
         }
 

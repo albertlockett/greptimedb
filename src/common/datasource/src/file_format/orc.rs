@@ -72,8 +72,9 @@ pub async fn new_orc_stream_reader(
 }
 
 pub async fn infer_orc_schema(reader: ReaderAdapter) -> Result<Schema> {
-    let reader = new_orc_stream_reader(reader).await?;
-    Ok(reader.schema().as_ref().clone())
+    // let reader = new_orc_stream_reader(reader).await?;
+    // Ok(reader.schema().as_ref().clone())
+    todo!()
 }
 
 #[async_trait]

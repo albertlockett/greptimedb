@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#![feature(never_type)]
+// #![feature(never_type)]
 
 pub mod adapter;
 pub mod cursor;

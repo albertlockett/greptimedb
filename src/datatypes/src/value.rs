@@ -1149,7 +1149,10 @@ impl TryFrom<ScalarValue> for Value {
                     .context(ConvertArrowArrayToScalarsSnafu)?
                     .into_iter()
                     .flatten()
-                    .map(|x| x.try_into())
+                    .map(|x| {
+                        todo!()
+                        // x.try_into()
+                    })
                     .collect::<Result<Vec<Value>>>()?;
                 Value::List(ListValue::new(items, Arc::new(datatype)))
             }
@@ -2998,10 +3001,11 @@ pub(crate) mod tests {
                     .into_iter()
                     .flatten()
                     .collect::<Vec<_>>();
-                assert_eq!(
-                    vs,
-                    vec![ScalarValue::Int32(Some(-1)), ScalarValue::Int32(None)]
-                );
+                todo!()
+                // assert_eq!(
+                //     vs,
+                //     vec![ScalarValue::Int32(Some(-1)), ScalarValue::Int32(None)]
+                // );
             }
             _ => unreachable!(),
         }

@@ -16,7 +16,7 @@ use std::fmt::Display;
 
 use datafusion::arrow::datatypes::DataType;
 use datafusion::logical_expr::ColumnarValue;
-use datafusion::logical_expr_common::type_coercion::aggregates::{BINARYS, STRINGS};
+// use datafusion::logical_expr_common::type_coercion::aggregates::{BINARYS, STRINGS};
 use datafusion_common::ScalarValue;
 use datafusion_expr::{ScalarFunctionArgs, Signature, TypeSignature, Volatility};
 use nalgebra::DVectorView;
@@ -49,16 +49,17 @@ pub(crate) struct VectorNormFunction {
 
 impl Default for VectorNormFunction {
     fn default() -> Self {
-        Self {
-            signature: Signature::one_of(
-                vec![
-                    TypeSignature::Uniform(1, STRINGS.to_vec()),
-                    TypeSignature::Uniform(1, BINARYS.to_vec()),
-                    TypeSignature::Uniform(1, vec![DataType::BinaryView]),
-                ],
-                Volatility::Immutable,
-            ),
-        }
+        todo!("oops no strings binararies")
+        // Self {
+        //     signature: Signature::one_of(
+        //         vec![
+        //             TypeSignature::Uniform(1, STRINGS.to_vec()),
+        //             TypeSignature::Uniform(1, BINARYS.to_vec()),
+        //             TypeSignature::Uniform(1, vec![DataType::BinaryView]),
+        //         ],
+        //         Volatility::Immutable,
+        //     ),
+        // }
     }
 }
 

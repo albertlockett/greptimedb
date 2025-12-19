@@ -19,7 +19,7 @@ use datafusion_common::DataFusionError;
 use datafusion_common::arrow::array::{Array, AsArray, StringViewBuilder};
 use datafusion_common::arrow::compute;
 use datafusion_common::arrow::datatypes::DataType;
-use datafusion_expr::type_coercion::aggregates::BINARYS;
+// use datafusion_expr::type_coercion::aggregates::BINARYS;
 use datafusion_expr::{ColumnarValue, ScalarFunctionArgs, Signature, TypeSignature, Volatility};
 use datatypes::types::vector_type_value_to_string;
 
@@ -34,15 +34,16 @@ pub struct VectorToStringFunction {
 
 impl Default for VectorToStringFunction {
     fn default() -> Self {
-        Self {
-            signature: Signature::one_of(
-                vec![
-                    TypeSignature::Uniform(1, vec![DataType::BinaryView]),
-                    TypeSignature::Uniform(1, BINARYS.to_vec()),
-                ],
-                Volatility::Immutable,
-            ),
-        }
+        todo!("oops no binaries")
+        // Self {
+        //     signature: Signature::one_of(
+        //         vec![
+        //             TypeSignature::Uniform(1, vec![DataType::BinaryView]),
+        //             TypeSignature::Uniform(1, BINARYS.to_vec()),
+        //         ],
+        //         Volatility::Immutable,
+        //     ),
+        // }
     }
 }
 

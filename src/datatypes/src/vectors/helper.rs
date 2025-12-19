@@ -174,7 +174,9 @@ impl Helper {
                     .context(ConvertArrowArrayToScalarsSnafu)?
                     .into_iter()
                     .flatten()
-                    .map(ScalarValue::try_into)
+                    .map(|v| {
+                        todo!() //ScalarValue::try_into
+                    })
                     .collect::<Result<Vec<Value>>>()?;
                 builder.push(Some(ListValueRef::Ref {
                     val: &ListValue::new(values, item_type),

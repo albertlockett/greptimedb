@@ -304,17 +304,18 @@ impl TryFrom<&Statement> for DfStatement {
     type Error = Error;
 
     fn try_from(s: &Statement) -> Result<Self, Self::Error> {
-        let s = match s {
-            Statement::Query(query) => SpStatement::Query(Box::new(query.inner.clone())),
-            Statement::Insert(insert) => insert.inner.clone(),
-            Statement::Delete(delete) => delete.inner.clone(),
-            _ => {
-                return ConvertToDfStatementSnafu {
-                    statement: format!("{s:?}"),
-                }
-                .fail();
-            }
-        };
-        Ok(DfStatement::Statement(Box::new(s)))
+        // let s = match s {
+        //     Statement::Query(query) => SpStatement::Query(Box::new(query.inner.clone())),
+        //     Statement::Insert(insert) => insert.inner.clone(),
+        //     Statement::Delete(delete) => delete.inner.clone(),
+        //     _ => {
+        //         return ConvertToDfStatementSnafu {
+        //             statement: format!("{s:?}"),
+        //         }
+        //         .fail();
+        //     }
+        // };
+        // Ok(DfStatement::Statement(Box::new(s)))
+        todo!()
     }
 }

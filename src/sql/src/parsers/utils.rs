@@ -72,79 +72,80 @@ pub fn parser_expr_to_scalar_value_literal(
     expr: sqlparser::ast::Expr,
     require_now_expr: bool,
 ) -> Result<ScalarValue> {
+    todo!()
     // 1. convert parser expr to logical expr
-    let empty_df_schema = DFSchema::empty();
-    let logical_expr = SqlToRel::new(&StubContextProvider::default())
-        .sql_to_expr(expr, &empty_df_schema, &mut Default::default())
-        .context(ConvertToLogicalExpressionSnafu)?;
+    // let empty_df_schema = DFSchema::empty();
+    // // let logical_expr = SqlToRel::new(&StubContextProvider::default())
+    // //     .sql_to_expr(expr, &empty_df_schema, &mut Default::default())
+    // //     .context(ConvertToLogicalExpressionSnafu)?;
 
-    struct FindNow {
-        found: bool,
-    }
+    // struct FindNow {
+    //     found: bool,
+    // }
 
-    impl TreeNodeVisitor<'_> for FindNow {
-        type Node = Expr;
-        fn f_down(
-            &mut self,
-            node: &Self::Node,
-        ) -> DfResult<datafusion_common::tree_node::TreeNodeRecursion> {
-            if let Expr::ScalarFunction(func) = node
-                && func.name().to_lowercase() == "now"
-            {
-                if !func.args.is_empty() {
-                    return Err(datafusion_common::DataFusionError::Plan(
-                        "now() function should not have arguments".to_string(),
-                    ));
-                }
-                self.found = true;
-                return Ok(datafusion_common::tree_node::TreeNodeRecursion::Stop);
-            }
-            Ok(datafusion_common::tree_node::TreeNodeRecursion::Continue)
-        }
-    }
+    // impl TreeNodeVisitor<'_> for FindNow {
+    //     type Node = Expr;
+    //     fn f_down(
+    //         &mut self,
+    //         node: &Self::Node,
+    //     ) -> DfResult<datafusion_common::tree_node::TreeNodeRecursion> {
+    //         if let Expr::ScalarFunction(func) = node
+    //             && func.name().to_lowercase() == "now"
+    //         {
+    //             if !func.args.is_empty() {
+    //                 return Err(datafusion_common::DataFusionError::Plan(
+    //                     "now() function should not have arguments".to_string(),
+    //                 ));
+    //             }
+    //             self.found = true;
+    //             return Ok(datafusion_common::tree_node::TreeNodeRecursion::Stop);
+    //         }
+    //         Ok(datafusion_common::tree_node::TreeNodeRecursion::Continue)
+    //     }
+    // }
 
-    if require_now_expr {
-        let have_now = {
-            let mut visitor = FindNow { found: false };
-            logical_expr.visit(&mut visitor).unwrap();
-            visitor.found
-        };
-        if !have_now {
-            return ParseSqlValueSnafu {
-                msg: format!(
-                    "expected now() expression, but not found in {}",
-                    logical_expr
-                ),
-            }
-            .fail();
-        }
-    }
+    // if require_now_expr {
+    //     let have_now = {
+    //         let mut visitor = FindNow { found: false };
+    //         logical_expr.visit(&mut visitor).unwrap();
+    //         visitor.found
+    //     };
+    //     if !have_now {
+    //         return ParseSqlValueSnafu {
+    //             msg: format!(
+    //                 "expected now() expression, but not found in {}",
+    //                 logical_expr
+    //             ),
+    //         }
+    //         .fail();
+    //     }
+    // }
 
-    // 2. simplify logical expr
-    let execution_props = ExecutionProps::new().with_query_execution_start_time(Utc::now());
-    let info =
-        SimplifyContext::new(&execution_props).with_schema(Arc::new(empty_df_schema.clone()));
+    // // 2. simplify logical expr
+    // let execution_props = ExecutionProps::new().with_query_execution_start_time(Utc::now());
+    // let info =
+    //     SimplifyContext::new(&execution_props).with_schema(Arc::new(empty_df_schema.clone()));
 
-    let simplifier = ExprSimplifier::new(info);
+    // let simplifier = ExprSimplifier::new(info);
 
-    // Coerce the logical expression so simplifier can handle it correctly. This is necessary for const eval with possible type mismatch. i.e.: `now() - now() + '15s'::interval` which is `TimestampNanosecond - TimestampNanosecond + IntervalMonthDayNano`.
-    let logical_expr = simplifier
-        .coerce(logical_expr, &empty_df_schema)
-        .context(SimplificationSnafu)?;
+    // // Coerce the logical expression so simplifier can handle it correctly. This is necessary for const eval with possible type mismatch. i.e.: `now() - now() + '15s'::interval` which is `TimestampNanosecond - TimestampNanosecond + IntervalMonthDayNano`.
+    // let logical_expr = simplifier
+    //     .coerce(logical_expr, &empty_df_schema)
+    //     .context(SimplificationSnafu)?;
 
-    let simplified_expr = simplifier
-        .simplify(logical_expr)
-        .context(SimplificationSnafu)?;
+    // let simplified_expr = simplifier
+    //     .simplify(logical_expr)
+    //     .context(SimplificationSnafu)?;
 
-    if let datafusion::logical_expr::Expr::Literal(lit, _) = simplified_expr {
-        Ok(lit)
-    } else {
-        // Err(ParseSqlValue)
-        ParseSqlValueSnafu {
-            msg: format!("expected literal value, but found {:?}", simplified_expr),
-        }
-        .fail()
-    }
+    // if let datafusion::logical_expr::Expr::Literal(lit, _) = simplified_expr {
+    //     Ok(lit)
+    // } else {
+    //     // Err(ParseSqlValue)
+    //     ParseSqlValueSnafu {
+    //         msg: format!("expected literal value, but found {:?}", simplified_expr),
+    //     }
+    //     .fail()
+    // }
 }
 
 /// Helper struct for [`parser_expr_to_scalar_value`].

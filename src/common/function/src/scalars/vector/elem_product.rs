@@ -16,7 +16,7 @@ use std::fmt::Display;
 
 use datafusion::arrow::datatypes::DataType;
 use datafusion::logical_expr::ColumnarValue;
-use datafusion::logical_expr_common::type_coercion::aggregates::{BINARYS, STRINGS};
+// use datafusion::logical_expr_common::type_coercion::aggregates::{BINARYS, STRINGS};
 use datafusion_common::ScalarValue;
 use datafusion_expr::{ScalarFunctionArgs, Signature, TypeSignature, Volatility};
 use nalgebra::DVectorView;
@@ -46,16 +46,17 @@ pub(crate) struct ElemProductFunction {
 
 impl Default for ElemProductFunction {
     fn default() -> Self {
-        Self {
-            signature: Signature::one_of(
-                vec![
-                    TypeSignature::Uniform(1, STRINGS.to_vec()),
-                    TypeSignature::Uniform(1, BINARYS.to_vec()),
-                    TypeSignature::Uniform(1, vec![DataType::BinaryView]),
-                ],
-                Volatility::Immutable,
-            ),
-        }
+        todo!("OOps no string/binaries")
+        // Self {
+        //     signature: Signature::one_of(
+        //         vec![
+        //             TypeSignature::Uniform(1, STRINGS.to_vec()),
+        //             TypeSignature::Uniform(1, BINARYS.to_vec()),
+        //             TypeSignature::Uniform(1, vec![DataType::BinaryView]),
+        //         ],
+        //         Volatility::Immutable,
+        //     ),
+        // }
     }
 }
 

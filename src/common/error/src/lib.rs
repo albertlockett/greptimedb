@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#![feature(error_iter)]
+// #![feature(error_iter)]
 
 pub mod ext;
 pub mod mock;
