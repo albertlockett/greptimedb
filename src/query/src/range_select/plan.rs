@@ -935,7 +935,8 @@ fn produce_align_time(
     // make modify_map for range_fn[i]
     for (row, hash) in by_columns_hash.iter().enumerate() {
         let ts = ts_column.value(row);
-        let ith_slot = (ts - align_to).div_floor(align);
+        // let ith_slot = (ts - align_to);
+        let ith_slot = div_flor(ts - align_to, align_to);
         let mut align_ts = ith_slot * align + align_to;
         while align_ts <= ts && ts < align_ts + range {
             modify_map
@@ -945,6 +946,10 @@ fn produce_align_time(
             align_ts -= align;
         }
     }
+}
+
+fn div_flor(val: i64, align_to: i64) -> i64 {
+    todo!("div floor")
 }
 
 fn cast_scalar_values(values: &mut [ScalarValue], data_type: &DataType) -> DfResult<()> {

@@ -542,7 +542,7 @@ impl QueryEngine for DatafusionQueryEngine {
         }
 
         // configure execution options
-        state.config_mut().options_mut().execution.time_zone = query_ctx.timezone().to_string();
+        state.config_mut().options_mut().execution.time_zone = Some(query_ctx.timezone().to_string());
 
         // usually it's impossible to have both `set variable` set by sql client and
         // hint in header by grpc client, so only need to deal with them separately

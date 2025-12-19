@@ -228,15 +228,16 @@ fn fetch_partition_range(input: Arc<dyn ExecutionPlan>) -> DataFusionResult<Opti
         Ok(Transformed::no(plan))
     })?;
 
-    let result = try {
-        ScannerInfo {
-            partition_ranges: partition_ranges?,
-            time_index,
-            tag_columns: tag_columns?,
-        }
-    };
+    todo!()
+    // let result = try {
+    //     ScannerInfo {
+    //         partition_ranges: partition_ranges?,
+    //         time_index,
+    //         tag_columns: tag_columns?,
+    //     }
+    // };
 
-    Ok(result)
+    // Ok(result)
 }
 
 /// Removes the repartition plan between the filter and region scan.

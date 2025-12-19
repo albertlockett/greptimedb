@@ -144,41 +144,42 @@ impl LogQueryPlanner {
         filters: &log_query::Filters,
         schema: &ArrowSchema,
     ) -> Result<Option<Expr>> {
-        match filters {
-            log_query::Filters::And(filters) => {
-                let exprs = filters
-                    .iter()
-                    .filter_map(|filter| self.build_filters(filter, schema).transpose())
-                    .try_collect::<Vec<_>>()?;
-                if exprs.is_empty() {
-                    Ok(None)
-                } else {
-                    Ok(conjunction(exprs))
-                }
-            }
-            log_query::Filters::Or(filters) => {
-                let exprs = filters
-                    .iter()
-                    .filter_map(|filter| self.build_filters(filter, schema).transpose())
-                    .try_collect::<Vec<_>>()?;
-                if exprs.is_empty() {
-                    Ok(None)
-                } else {
-                    Ok(disjunction(exprs))
-                }
-            }
-            log_query::Filters::Not(filter) => {
-                if let Some(expr) = self.build_filters(filter, schema)? {
-                    Ok(Some(not(expr)))
-                } else {
-                    Ok(None)
-                }
-            }
-            log_query::Filters::Single(column_filters) => {
-                // Build a single column filter
-                self.build_column_filter(column_filters, schema)
-            }
-        }
+        todo!()
+        // match filters {
+        //     log_query::Filters::And(filters) => {
+        //         let exprs = filters
+        //             .iter()
+        //             .filter_map(|filter| self.build_filters(filter, schema).transpose())
+        //             .try_collect::<Vec<_>>()?;
+        //         if exprs.is_empty() {
+        //             Ok(None)
+        //         } else {
+        //             Ok(conjunction(exprs))
+        //         }
+        //     }
+        //     log_query::Filters::Or(filters) => {
+        //         let exprs = filters
+        //             .iter()
+        //             .filter_map(|filter| self.build_filters(filter, schema).transpose())
+        //             .try_collect::<Vec<_>>()?;
+        //         if exprs.is_empty() {
+        //             Ok(None)
+        //         } else {
+        //             Ok(disjunction(exprs))
+        //         }
+        //     }
+        //     log_query::Filters::Not(filter) => {
+        //         if let Some(expr) = self.build_filters(filter, schema)? {
+        //             Ok(Some(not(expr)))
+        //         } else {
+        //             Ok(None)
+        //         }
+        //     }
+        //     log_query::Filters::Single(column_filters) => {
+        //         // Build a single column filter
+        //         self.build_column_filter(column_filters, schema)
+        //     }
+        // }
     }
 
     /// Builds filter expression from ColumnFilters (new structure with expr + filters)
@@ -187,25 +188,26 @@ impl LogQueryPlanner {
         column_filter: &log_query::ColumnFilters,
         schema: &ArrowSchema,
     ) -> Result<Option<Expr>> {
-        // Convert ArrowSchema to DFSchema for the more generic function
-        let df_schema = DFSchema::try_from(schema.clone()).context(DataFusionPlanningSnafu)?;
-        let col_expr = self.log_expr_to_df_expr(&column_filter.expr, &df_schema)?;
+        todo!()
+        // // Convert ArrowSchema to DFSchema for the more generic function
+        // let df_schema = DFSchema::try_from(schema.clone()).context(DataFusionPlanningSnafu)?;
+        // let col_expr = self.log_expr_to_df_expr(&column_filter.expr, &df_schema)?;
 
-        let filter_exprs = column_filter
-            .filters
-            .iter()
-            .filter_map(|filter| {
-                self.build_content_filter_with_expr(col_expr.clone(), filter, &df_schema)
-                    .transpose()
-            })
-            .try_collect::<Vec<_>>()?;
+        // let filter_exprs = column_filter
+        //     .filters
+        //     .iter()
+        //     .filter_map(|filter| {
+        //         self.build_content_filter_with_expr(col_expr.clone(), filter, &df_schema)
+        //             .transpose()
+        //     })
+        //     .try_collect::<Vec<_>>()?;
 
-        if filter_exprs.is_empty() {
-            return Ok(Some(col_expr.is_true()));
-        }
+        // if filter_exprs.is_empty() {
+        //     return Ok(Some(col_expr.is_true()));
+        // }
 
-        // Combine all filters with AND logic
-        Ok(conjunction(filter_exprs))
+        // // Combine all filters with AND logic
+        // Ok(conjunction(filter_exprs))
     }
 
     /// Builds filter expression from a single ContentFilter using a provided column expression
@@ -216,97 +218,98 @@ impl LogQueryPlanner {
         filter: &log_query::ContentFilter,
         schema: &DFSchema,
     ) -> Result<Option<Expr>> {
-        match filter {
-            log_query::ContentFilter::Exact(value) => Ok(Some(
-                col_expr.like(lit(ScalarValue::Utf8(Some(escape_like_pattern(value))))),
-            )),
-            log_query::ContentFilter::Prefix(value) => Ok(Some(col_expr.like(lit(
-                ScalarValue::Utf8(Some(format!("{}%", escape_like_pattern(value)))),
-            )))),
-            log_query::ContentFilter::Postfix(value) => Ok(Some(col_expr.like(lit(
-                ScalarValue::Utf8(Some(format!("%{}", escape_like_pattern(value)))),
-            )))),
-            log_query::ContentFilter::Contains(value) => Ok(Some(col_expr.like(lit(
-                ScalarValue::Utf8(Some(format!("%{}%", escape_like_pattern(value)))),
-            )))),
-            log_query::ContentFilter::Regex(_pattern) => Err(UnimplementedSnafu {
-                feature: "regex filter",
-            }
-            .build()),
-            log_query::ContentFilter::Exist => Ok(Some(col_expr.is_not_null())),
-            log_query::ContentFilter::Between {
-                start,
-                end,
-                start_inclusive,
-                end_inclusive,
-            } => {
-                let start_literal = self.create_inferred_literal(start, &col_expr, schema);
-                let end_literal = self.create_inferred_literal(end, &col_expr, schema);
+        todo!()
+        // match filter {
+        //     log_query::ContentFilter::Exact(value) => Ok(Some(
+        //         col_expr.like(lit(ScalarValue::Utf8(Some(escape_like_pattern(value))))),
+        //     )),
+        //     log_query::ContentFilter::Prefix(value) => Ok(Some(col_expr.like(lit(
+        //         ScalarValue::Utf8(Some(format!("{}%", escape_like_pattern(value)))),
+        //     )))),
+        //     log_query::ContentFilter::Postfix(value) => Ok(Some(col_expr.like(lit(
+        //         ScalarValue::Utf8(Some(format!("%{}", escape_like_pattern(value)))),
+        //     )))),
+        //     log_query::ContentFilter::Contains(value) => Ok(Some(col_expr.like(lit(
+        //         ScalarValue::Utf8(Some(format!("%{}%", escape_like_pattern(value)))),
+        //     )))),
+        //     log_query::ContentFilter::Regex(_pattern) => Err(UnimplementedSnafu {
+        //         feature: "regex filter",
+        //     }
+        //     .build()),
+        //     log_query::ContentFilter::Exist => Ok(Some(col_expr.is_not_null())),
+        //     log_query::ContentFilter::Between {
+        //         start,
+        //         end,
+        //         start_inclusive,
+        //         end_inclusive,
+        //     } => {
+        //         let start_literal = self.create_inferred_literal(start, &col_expr, schema);
+        //         let end_literal = self.create_inferred_literal(end, &col_expr, schema);
 
-                let left = if *start_inclusive {
-                    col_expr.clone().gt_eq(start_literal)
-                } else {
-                    col_expr.clone().gt(start_literal)
-                };
-                let right = if *end_inclusive {
-                    col_expr.lt_eq(end_literal)
-                } else {
-                    col_expr.lt(end_literal)
-                };
-                Ok(Some(left.and(right)))
-            }
-            log_query::ContentFilter::GreatThan { value, inclusive } => {
-                let value_literal = self.create_inferred_literal(value, &col_expr, schema);
-                let comparison_expr = if *inclusive {
-                    col_expr.gt_eq(value_literal)
-                } else {
-                    col_expr.gt(value_literal)
-                };
-                Ok(Some(comparison_expr))
-            }
-            log_query::ContentFilter::LessThan { value, inclusive } => {
-                let value_literal = self.create_inferred_literal(value, &col_expr, schema);
-                if *inclusive {
-                    Ok(Some(col_expr.lt_eq(value_literal)))
-                } else {
-                    Ok(Some(col_expr.lt(value_literal)))
-                }
-            }
-            log_query::ContentFilter::In(values) => {
-                let inferred_values: Vec<_> = values
-                    .iter()
-                    .map(|v| self.create_inferred_literal(v, &col_expr, schema))
-                    .collect();
-                Ok(Some(col_expr.in_list(inferred_values, false)))
-            }
-            log_query::ContentFilter::IsTrue => Ok(Some(col_expr.is_true())),
-            log_query::ContentFilter::IsFalse => Ok(Some(col_expr.is_false())),
-            log_query::ContentFilter::Equal(value) => {
-                let value_literal = Self::create_eq_literal(value.clone());
-                Ok(Some(col_expr.eq(value_literal)))
-            }
-            log_query::ContentFilter::Compound(filters, op) => {
-                let exprs = filters
-                    .iter()
-                    .filter_map(|filter| {
-                        self.build_content_filter_with_expr(col_expr.clone(), filter, schema)
-                            .transpose()
-                    })
-                    .try_collect::<Vec<_>>()?;
+        //         let left = if *start_inclusive {
+        //             col_expr.clone().gt_eq(start_literal)
+        //         } else {
+        //             col_expr.clone().gt(start_literal)
+        //         };
+        //         let right = if *end_inclusive {
+        //             col_expr.lt_eq(end_literal)
+        //         } else {
+        //             col_expr.lt(end_literal)
+        //         };
+        //         Ok(Some(left.and(right)))
+        //     }
+        //     log_query::ContentFilter::GreatThan { value, inclusive } => {
+        //         let value_literal = self.create_inferred_literal(value, &col_expr, schema);
+        //         let comparison_expr = if *inclusive {
+        //             col_expr.gt_eq(value_literal)
+        //         } else {
+        //             col_expr.gt(value_literal)
+        //         };
+        //         Ok(Some(comparison_expr))
+        //     }
+        //     log_query::ContentFilter::LessThan { value, inclusive } => {
+        //         let value_literal = self.create_inferred_literal(value, &col_expr, schema);
+        //         if *inclusive {
+        //             Ok(Some(col_expr.lt_eq(value_literal)))
+        //         } else {
+        //             Ok(Some(col_expr.lt(value_literal)))
+        //         }
+        //     }
+        //     log_query::ContentFilter::In(values) => {
+        //         let inferred_values: Vec<_> = values
+        //             .iter()
+        //             .map(|v| self.create_inferred_literal(v, &col_expr, schema))
+        //             .collect();
+        //         Ok(Some(col_expr.in_list(inferred_values, false)))
+        //     }
+        //     log_query::ContentFilter::IsTrue => Ok(Some(col_expr.is_true())),
+        //     log_query::ContentFilter::IsFalse => Ok(Some(col_expr.is_false())),
+        //     log_query::ContentFilter::Equal(value) => {
+        //         let value_literal = Self::create_eq_literal(value.clone());
+        //         Ok(Some(col_expr.eq(value_literal)))
+        //     }
+        //     log_query::ContentFilter::Compound(filters, op) => {
+        //         let exprs = filters
+        //             .iter()
+        //             .filter_map(|filter| {
+        //                 self.build_content_filter_with_expr(col_expr.clone(), filter, schema)
+        //                     .transpose()
+        //             })
+        //             .try_collect::<Vec<_>>()?;
 
-                if exprs.is_empty() {
-                    return Ok(None);
-                }
+        //         if exprs.is_empty() {
+        //             return Ok(None);
+        //         }
 
-                match op {
-                    log_query::ConjunctionOperator::And => Ok(conjunction(exprs)),
-                    log_query::ConjunctionOperator::Or => {
-                        // Build a disjunction (OR) of expressions
-                        Ok(exprs.into_iter().reduce(|a, b| a.or(b)))
-                    }
-                }
-            }
-        }
+        //         match op {
+        //             log_query::ConjunctionOperator::And => Ok(conjunction(exprs)),
+        //             log_query::ConjunctionOperator::Or => {
+        //                 // Build a disjunction (OR) of expressions
+        //                 Ok(exprs.into_iter().reduce(|a, b| a.or(b)))
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     fn build_aggr_func(
@@ -315,39 +318,40 @@ impl LogQueryPlanner {
         expr: &[AggFunc],
         by: &[LogExpr],
     ) -> Result<(Vec<Expr>, Vec<Expr>)> {
-        let aggr_expr = expr
-            .iter()
-            .map(|agg_func| {
-                let AggFunc {
-                    name: fn_name,
-                    args,
-                    alias,
-                } = agg_func;
-                let aggr_fn = self
-                    .session_state
-                    .aggregate_functions()
-                    .get(fn_name)
-                    .with_context(|| UnknownAggregateFunctionSnafu {
-                        name: fn_name.clone(),
-                    })?;
-                let args = args
-                    .iter()
-                    .map(|expr| self.log_expr_to_df_expr(expr, schema))
-                    .try_collect::<Vec<_>>()?;
-                if let Some(alias) = alias {
-                    Ok(aggr_fn.call(args).alias(alias))
-                } else {
-                    Ok(aggr_fn.call(args))
-                }
-            })
-            .try_collect::<Vec<_>>()?;
+        todo!()
+        // let aggr_expr = expr
+        //     .iter()
+        //     .map(|agg_func| {
+        //         let AggFunc {
+        //             name: fn_name,
+        //             args,
+        //             alias,
+        //         } = agg_func;
+        //         let aggr_fn = self
+        //             .session_state
+        //             .aggregate_functions()
+        //             .get(fn_name)
+        //             .with_context(|| UnknownAggregateFunctionSnafu {
+        //                 name: fn_name.clone(),
+        //             })?;
+        //         let args = args
+        //             .iter()
+        //             .map(|expr| self.log_expr_to_df_expr(expr, schema))
+        //             .try_collect::<Vec<_>>()?;
+        //         if let Some(alias) = alias {
+        //             Ok(aggr_fn.call(args).alias(alias))
+        //         } else {
+        //             Ok(aggr_fn.call(args))
+        //         }
+        //     })
+        //     .try_collect::<Vec<_>>()?;
 
-        let group_exprs = by
-            .iter()
-            .map(|expr| self.log_expr_to_df_expr(expr, schema))
-            .try_collect::<Vec<_>>()?;
+        // let group_exprs = by
+        //     .iter()
+        //     .map(|expr| self.log_expr_to_df_expr(expr, schema))
+        //     .try_collect::<Vec<_>>()?;
 
-        Ok((aggr_expr, group_exprs))
+        // Ok((aggr_expr, group_exprs))
     }
 
     /// Converts a LogExpr to a DataFusion Expr, handling all expression types.
@@ -384,22 +388,23 @@ impl LogQueryPlanner {
         args: &[LogExpr],
         alias: &Option<String>,
     ) -> Result<Expr> {
-        let args = args
-            .iter()
-            .map(|expr| self.log_expr_to_df_expr(expr, schema))
-            .try_collect::<Vec<_>>()?;
-        let func = self.session_state.scalar_functions().get(name).context(
-            UnknownScalarFunctionSnafu {
-                name: name.to_string(),
-            },
-        )?;
-        let expr = func.call(args);
+        todo!()
+        // let args = args
+        //     .iter()
+        //     .map(|expr| self.log_expr_to_df_expr(expr, schema))
+        //     .try_collect::<Vec<_>>()?;
+        // let func = self.session_state.scalar_functions().get(name).context(
+        //     UnknownScalarFunctionSnafu {
+        //         name: name.to_string(),
+        //     },
+        // )?;
+        // let expr = func.call(args);
 
-        if let Some(alias) = alias {
-            Ok(expr.alias(alias))
-        } else {
-            Ok(expr)
-        }
+        // if let Some(alias) = alias {
+        //     Ok(expr.alias(alias))
+        // } else {
+        //     Ok(expr)
+        // }
     }
 
     /// Convert BinaryOperator to DataFusion's Operator.

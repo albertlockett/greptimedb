@@ -136,103 +136,104 @@ impl DfLogicalPlanner {
     #[tracing::instrument(skip_all)]
     #[async_recursion::async_recursion]
     async fn plan_sql(&self, stmt: &Statement, query_ctx: QueryContextRef) -> Result<LogicalPlan> {
-        let mut planner_context = PlannerContext::new();
-        let mut stmt = Cow::Borrowed(stmt);
-        let mut is_tql_cte = false;
+        todo!()
+        // let mut planner_context = PlannerContext::new();
+        // let mut stmt = Cow::Borrowed(stmt);
+        // let mut is_tql_cte = false;
 
-        // handle explain before normal processing so we can explain Greptime Statements
-        if let Statement::Explain(explain) = stmt.as_ref() {
-            return self.explain_to_plan(explain, query_ctx).await;
-        }
+        // // handle explain before normal processing so we can explain Greptime Statements
+        // if let Statement::Explain(explain) = stmt.as_ref() {
+        //     return self.explain_to_plan(explain, query_ctx).await;
+        // }
 
-        // Check for hybrid CTEs before normal processing
-        if self.has_hybrid_ctes(stmt.as_ref()) {
-            let stmt_owned = stmt.into_owned();
-            let mut query = match stmt_owned {
-                Statement::Query(query) => query.as_ref().clone(),
-                _ => unreachable!("has_hybrid_ctes should only return true for Query statements"),
-            };
-            self.plan_query_with_hybrid_ctes(&query, query_ctx.clone(), &mut planner_context)
-                .await?;
+        // // Check for hybrid CTEs before normal processing
+        // if self.has_hybrid_ctes(stmt.as_ref()) {
+        //     let stmt_owned = stmt.into_owned();
+        //     let mut query = match stmt_owned {
+        //         Statement::Query(query) => query.as_ref().clone(),
+        //         _ => unreachable!("has_hybrid_ctes should only return true for Query statements"),
+        //     };
+        //     self.plan_query_with_hybrid_ctes(&query, query_ctx.clone(), &mut planner_context)
+        //         .await?;
 
-            // remove the processed TQL CTEs from the query
-            query.hybrid_cte = None;
-            stmt = Cow::Owned(Statement::Query(Box::new(query)));
-            is_tql_cte = true;
-        }
+        //     // remove the processed TQL CTEs from the query
+        //     query.hybrid_cte = None;
+        //     stmt = Cow::Owned(Statement::Query(Box::new(query)));
+        //     is_tql_cte = true;
+        // }
 
-        let mut df_stmt = stmt.as_ref().try_into().context(SqlSnafu)?;
+        // let mut df_stmt = stmt.as_ref().try_into().context(SqlSnafu)?;
 
-        // TODO(LFC): Remove this when Datafusion supports **both** the syntax and implementation of "explain with format".
-        if let datafusion::sql::parser::Statement::Statement(
-            box datafusion::sql::sqlparser::ast::Statement::Explain { .. },
-        ) = &mut df_stmt
-        {
-            UnimplementedSnafu {
-                operation: "EXPLAIN with FORMAT using raw datafusion planner",
-            }
-            .fail()?;
-        }
+        // // TODO(LFC): Remove this when Datafusion supports **both** the syntax and implementation of "explain with format".
+        // if let datafusion::sql::parser::Statement::Statement(
+        //     box datafusion::sql::sqlparser::ast::Statement::Explain { .. },
+        // ) = &mut df_stmt
+        // {
+        //     UnimplementedSnafu {
+        //         operation: "EXPLAIN with FORMAT using raw datafusion planner",
+        //     }
+        //     .fail()?;
+        // }
 
-        let table_provider = DfTableSourceProvider::new(
-            self.engine_state.catalog_manager().clone(),
-            self.engine_state.disallow_cross_catalog_query(),
-            query_ctx.clone(),
-            Arc::new(DefaultPlanDecoder::new(
-                self.session_state.clone(),
-                &query_ctx,
-            )?),
-            self.session_state
-                .config_options()
-                .sql_parser
-                .enable_ident_normalization,
-        );
+        // let table_provider = DfTableSourceProvider::new(
+        //     self.engine_state.catalog_manager().clone(),
+        //     self.engine_state.disallow_cross_catalog_query(),
+        //     query_ctx.clone(),
+        //     Arc::new(DefaultPlanDecoder::new(
+        //         self.session_state.clone(),
+        //         &query_ctx,
+        //     )?),
+        //     self.session_state
+        //         .config_options()
+        //         .sql_parser
+        //         .enable_ident_normalization,
+        // );
 
-        let context_provider = DfContextProviderAdapter::try_new(
-            self.engine_state.clone(),
-            self.session_state.clone(),
-            Some(&df_stmt),
-            query_ctx.clone(),
-        )
-        .await?;
+        // let context_provider = DfContextProviderAdapter::try_new(
+        //     self.engine_state.clone(),
+        //     self.session_state.clone(),
+        //     Some(&df_stmt),
+        //     query_ctx.clone(),
+        // )
+        // .await?;
 
-        let config_options = self.session_state.config().options();
-        let parser_options = &config_options.sql_parser;
-        let parser_options = ParserOptions {
-            map_string_types_to_utf8view: false,
-            ..parser_options.into()
-        };
+        // let config_options = self.session_state.config().options();
+        // let parser_options = &config_options.sql_parser;
+        // let parser_options = ParserOptions {
+        //     map_string_types_to_utf8view: false,
+        //     ..parser_options.into()
+        // };
 
-        let sql_to_rel = SqlToRel::new_with_options(&context_provider, parser_options);
+        // let sql_to_rel = SqlToRel::new_with_options(&context_provider, parser_options);
 
-        // this IF is to handle different version of ASTs
-        let result = if is_tql_cte {
-            let Statement::Query(query) = stmt.into_owned() else {
-                unreachable!("is_tql_cte should only be true for Query statements");
-            };
-            let sqlparser_stmt = sqlparser::ast::Statement::Query(Box::new(query.inner));
-            sql_to_rel
-                .sql_statement_to_plan_with_context(sqlparser_stmt, &mut planner_context)
-                .context(PlanSqlSnafu)?
-        } else {
-            sql_to_rel
-                .statement_to_plan(df_stmt)
-                .context(PlanSqlSnafu)?
-        };
+        // // this IF is to handle different version of ASTs
+        // let result = if is_tql_cte {
+        //     let Statement::Query(query) = stmt.into_owned() else {
+        //         unreachable!("is_tql_cte should only be true for Query statements");
+        //     };
+        //     let sqlparser_stmt = sqlparser::ast::Statement::Query(Box::new(query.inner));
+        //     sql_to_rel
+        //         .sql_statement_to_plan_with_context(sqlparser_stmt, &mut planner_context)
+        //         .context(PlanSqlSnafu)?
+        // } else {
+        //     sql_to_rel
+        //         .statement_to_plan(df_stmt)
+        //         .context(PlanSqlSnafu)?
+        // };
 
-        common_telemetry::debug!("Logical planner, statement to plan result: {result}");
-        let plan = RangePlanRewriter::new(table_provider, query_ctx.clone())
-            .rewrite(result)
-            .await?;
+        // common_telemetry::debug!("Logical planner, statement to plan result: {result}");
+        // let plan = RangePlanRewriter::new(table_provider, query_ctx.clone())
+        //     .rewrite(result)
+        //     .await?;
 
-        // Optimize logical plan by extension rules
-        let context = QueryEngineContext::new(self.session_state.clone(), query_ctx);
-        let plan = self
-            .engine_state
-            .optimize_by_extension_rules(plan, &context)?;
-        common_telemetry::debug!("Logical planner, optimize result: {plan}");
+        // // Optimize logical plan by extension rules
+        // let context = QueryEngineContext::new(self.session_state.clone(), query_ctx);
+        // let plan = self
+        //     .engine_state
+        //     .optimize_by_extension_rules(plan, &context)?;
+        // common_telemetry::debug!("Logical planner, optimize result: {plan}");
 
-        Ok(plan)
+        // Ok(plan)
     }
 
     /// Generate a relational expression from a SQL expression
@@ -244,25 +245,26 @@ impl DfLogicalPlanner {
         normalize_ident: bool,
         query_ctx: QueryContextRef,
     ) -> Result<DfExpr> {
-        let context_provider = DfContextProviderAdapter::try_new(
-            self.engine_state.clone(),
-            self.session_state.clone(),
-            None,
-            query_ctx,
-        )
-        .await?;
+        todo!()
+        // let context_provider = DfContextProviderAdapter::try_new(
+        //     self.engine_state.clone(),
+        //     self.session_state.clone(),
+        //     None,
+        //     query_ctx,
+        // )
+        // .await?;
 
-        let config_options = self.session_state.config().options();
-        let parser_options = &config_options.sql_parser;
-        let parser_options: ParserOptions = ParserOptions {
-            map_string_types_to_utf8view: false,
-            enable_ident_normalization: normalize_ident,
-            ..parser_options.into()
-        };
+        // let config_options = self.session_state.config().options();
+        // let parser_options = &config_options.sql_parser;
+        // let parser_options: ParserOptions = ParserOptions {
+        //     map_string_types_to_utf8view: false,
+        //     enable_ident_normalization: normalize_ident,
+        //     ..parser_options.into()
+        // };
 
-        let sql_to_rel = SqlToRel::new_with_options(&context_provider, parser_options);
+        // let sql_to_rel = SqlToRel::new_with_options(&context_provider, parser_options);
 
-        Ok(sql_to_rel.sql_to_expr(sql, schema, &mut PlannerContext::new())?)
+        // Ok(sql_to_rel.sql_to_expr(sql, schema, &mut PlannerContext::new())?)
     }
 
     #[tracing::instrument(skip_all)]
